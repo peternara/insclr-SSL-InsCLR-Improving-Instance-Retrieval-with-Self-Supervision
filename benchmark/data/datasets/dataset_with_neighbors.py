@@ -4,24 +4,24 @@ from .utils import imread
 
 class DatasetWithNeighbors:
     def __init__(self, dataset, neighbors, k):
-        self.dataset = dataset
-        self.paths = dataset.paths
-        self.labels = dataset.labels
-        self.transform = dataset.transform
+        self.dataset          = dataset
+        self.paths            = dataset.paths
+        self.labels           = dataset.labels
+        self.transform        = dataset.transform
         self.target_transform = dataset.target_transform
-        self.noaug_transform = dataset.noaug_transform
-        self.label_ind = dataset.label_ind
+        self.noaug_transform  = dataset.noaug_transform
+        self.label_ind        = dataset.label_ind
         
-        self.neighbors = neighbors[:, :k]
+        self.neighbors        = neighbors[:, :k] # k = 1
 
     def __getitem__(self, idx):
         # read image
-        path = self.paths[idx]
-        label = self.labels[idx]
-        neighbor_ind = self.neighbors[idx]
-        neighbor_paths = [self.paths[i] for i in neighbor_ind]
+        path            = self.paths[idx]
+        label           = self.labels[idx]
+        neighbor_ind    = self.neighbors[idx]
+        neighbor_paths  = [self.paths[i] for i in neighbor_ind]
         neighbor_labels = [self.labels[i] for i in neighbor_ind]
-        neighbor_ind = torch.from_numpy(neighbor_ind).long()
+        neighbor_ind    = torch.from_numpy(neighbor_ind).long()
 
         # fake label start from 1
         fake_label      = idx + 1
