@@ -67,6 +67,7 @@ def do_train(cfg, dataloader, model, criterion, optimizer, scheduler,
         neighbor_inputs  = batch["neighbor_inputs"] 
         neighbor_indices = batch["neighbor_ind"]
         neighbor_labels  = batch["neighbor_labels"]  # fake label > benchmark/data/datasets/dataset_with_neighbors.py#L42
+        # anchor_labels == neighbor_labels 은 같아야한다. 실제 소스에서도 그렇고.
 
         # cat
         inputs  = torch.cat((anchor_inputs, neighbor_inputs), dim=0)
