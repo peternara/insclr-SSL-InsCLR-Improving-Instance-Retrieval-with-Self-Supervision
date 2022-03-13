@@ -43,10 +43,10 @@ def run(task, dataset, name):
     else:
         feature_file = os.path.join(OUTPUT_DIR, dataset, name + "_feature.npz")
         logger.info(f"generate neighbors from {feature_file}")
-        data = np.load(feature_file)
-        features = data["feature"]
-        targets = data["target"]
-        memory_bank = MemoryBank(len(targets), features.shape[1], None, None)
+        data         = np.load(feature_file)
+        features     = data["feature"]
+        targets      = data["target"]
+        memory_bank  = MemoryBank(len(targets), features.shape[1], None, None)
         memory_bank.update(features, targets, np.arange(len(targets)))
         
         # avoid OOM
