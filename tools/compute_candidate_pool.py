@@ -49,7 +49,7 @@ def run(task, dataset, name):
         memory_bank  = MemoryBank(len(targets), features.shape[1], None, None)
         memory_bank.update(features, targets, np.arange(len(targets)))
         
-        # avoid OOM
+        # avoid OOM (? Out Of Memory)
         num_chunks = 12
         ranges = np.linspace(0, len(targets), num=num_chunks + 1, dtype=np.int32)
         # 예를들어, len(targets) == 10000 이라면
