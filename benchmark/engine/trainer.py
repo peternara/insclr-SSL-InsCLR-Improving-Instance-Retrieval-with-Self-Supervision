@@ -56,11 +56,13 @@ def do_train(cfg, dataloader, model, criterion, optimizer, scheduler,
         log = {}
         data_time = time.time() - end
 
-        # see : https://github.com/peternara/insclr-SSL-InsCLR-Improving-Instance-Retrieval-with-Self-Supervision/blob/main/benchmark/data/datasets/gldv2.py#L55 
+        # see : ./benchmark/data/datasets/gldv2.py#L55 
         anchor_inputs    = batch["input"]
         anchor_indices   = batch["idx"]
         anchor_labels    = batch["label"]
 
+        # gldv2.py 에 이게 없다 ?
+        # /benchmark/data/datasets/dataset_with_neighbors.py 여기서야하는데.. 이상하다.
         neighbor_inputs  = batch["neighbor_inputs"] 
         neighbor_indices = batch["neighbor_ind"]
         neighbor_labels  = batch["neighbor_labels"]
