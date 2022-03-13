@@ -24,19 +24,20 @@ class DatasetWithNeighbors:
         neighbor_ind = torch.from_numpy(neighbor_ind).long()
 
         # fake label start from 1
-        fake_label = idx + 1
+        fake_label      = idx + 1
 
-        img = imread(path)
-        neighbor_imgs = [imread(_) for _ in neighbor_paths]
-        input = self.transform(img)
+        img             = imread(path)
+        neighbor_imgs   = [imread(_) for _ in neighbor_paths]
+        input           = self.transform(img)
         neighbor_inputs = torch.stack([self.transform(_) for _ in neighbor_imgs], dim=0)
 
         if self.target_transform is not None:
-            target = self.target_transform(label)
+            target           = self.target_transform(label)
             neighbor_targets = [self.target_transform(_) for _ in neighbor_labels]
         else:
-            target = label
+            target           = label
             neighbor_targets = neighbor_labels
+            
         neighbor_targets = torch.LongTensor(neighbor_targets)
         # we assume that neighbors have the same fake label as anchor
         neighbor_fake_labels = torch.ones_like(neighbor_targets) * fake_label
