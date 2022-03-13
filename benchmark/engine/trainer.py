@@ -61,11 +61,12 @@ def do_train(cfg, dataloader, model, criterion, optimizer, scheduler,
         # /benchmark/data/__init__.py#L44 
         anchor_inputs    = batch["input"]
         anchor_indices   = batch["idx"]
-        anchor_labels    = batch["label"]      
+        anchor_labels    = batch["label"] # fake label > /benchmark/data/datasets/dataset_with_neighbors.py#L27 
+        # anchor_target    = batch["target"] # 실제 클래스 (GDV2)
         
         neighbor_inputs  = batch["neighbor_inputs"] 
         neighbor_indices = batch["neighbor_ind"]
-        neighbor_labels  = batch["neighbor_labels"]
+        neighbor_labels  = batch["neighbor_labels"]  # fake label > benchmark/data/datasets/dataset_with_neighbors.py#L42
 
         # cat
         inputs  = torch.cat((anchor_inputs, neighbor_inputs), dim=0)
