@@ -9,21 +9,22 @@ import faiss
 class MemoryBank:
     def __init__(self, dataset_size, feature_dim, num_classes, temperature):
         self.dataset_size = dataset_size
-        self.feature_dim = feature_dim 
-        self.features = np.zeros(shape=(self.dataset_size, self.feature_dim), dtype=np.float32)
-        self.targets = np.zeros(shape=(self.dataset_size, ), dtype=np.int64)
-        self.num_classes = num_classes
-        self.temperature = temperature
+        self.feature_dim  = feature_dim 
+        self.features     = np.zeros(shape=(self.dataset_size, self.feature_dim), dtype=np.float32)
+        self.targets      = np.zeros(shape=(self.dataset_size, ), dtype=np.int64)
+        self.num_classes  = num_classes
+        self.temperature  = temperature
 
     def mine_nearest_neighbors(self, topk, features=None):
         if features is None:
             features = self.features
+            
         # mine the topk nearest neighbors for every sample
-        index = faiss.IndexFlatIP(self.feature_dim)
-        index = faiss.index_cpu_to_all_gpus(index)
+        index      = faiss.IndexFlatIP(self.feature_dim)
+        index      = faiss.index_cpu_to_all_gpus(index)
         index.add(self.features)
         _, indices = index.search(features, topk + 1) # Sample itself is included
-        return indices[:, 1:]
+        return indices[:, 1:] # 자기 자신을 제거
     
     def compute_nearest_neighbors_accuracy(self, topk):
         if isinstance(topk, int):
