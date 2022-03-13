@@ -48,24 +48,28 @@ def run(task, dataset, name):
         targets = data["target"]
         memory_bank = MemoryBank(len(targets), features.shape[1], None, None)
         memory_bank.update(features, targets, np.arange(len(targets)))
+        
         # avoid OOM
         num_chunks = 12
         ranges = np.linspace(0, len(targets), num=num_chunks + 1, dtype=np.int32)
+        # 예를들어, len(targets) == 10000 이라면
+        # ranges = [    0   833  1666  2500  3333  4166  5000  5833  6666  7500  8333  9166  10000]
+        # 10000 % 12 = 833 간격으로 생성        
         
-        neighbors = []
+        neighbors    = []
         similarities = []
 
         for i in tqdm(range(num_chunks)):
             mined_features = features[ranges[i]:ranges[i + 1]]
-            _neighbors = memory_bank.mine_nearest_neighbors(topk=500, features=mined_features)
+            _neighbors     = memory_bank.mine_nearest_neighbors(topk=500, features=mined_features)
             neighbors.append(_neighbors)
 
             for j in range(len(mined_features)):
                 single_feature = mined_features[j]
-                its_neighbors = features[_neighbors[j]]
+                its_neighbors  = features[_neighbors[j]]
                 similarities.append(np.dot(single_feature, its_neighbors.T))
 
-        neighbors = np.concatenate(neighbors, axis=0)
+        neighbors    = np.concatenate(neighbors, axis=0)
         similarities = np.stack(similarities, axis=0)
 
         logger.info(f"neighbors shape: {neighbors.shape}")
