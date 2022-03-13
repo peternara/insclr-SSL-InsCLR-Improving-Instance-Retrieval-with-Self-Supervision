@@ -50,18 +50,20 @@ def do_train(cfg, dataloader, model, criterion, optimizer, scheduler,
             raise ValueError(f"undefined XBM version: {cfg.XBM.VERSION}")
                  
     start_training_time = time.time()
-    end = time.time()
+    end = time.time()  
+        
     for step, batch in enumerate(dataloader, 1):
         log = {}
         data_time = time.time() - end
 
-        anchor_inputs = batch["input"]
-        anchor_indices = batch["idx"]
-        anchor_labels = batch["label"]
+        # see : https://github.com/peternara/insclr-SSL-InsCLR-Improving-Instance-Retrieval-with-Self-Supervision/blob/main/benchmark/data/datasets/gldv2.py#L55 
+        anchor_inputs    = batch["input"]
+        anchor_indices   = batch["idx"]
+        anchor_labels    = batch["label"]
 
-        neighbor_inputs = batch["neighbor_inputs"] 
+        neighbor_inputs  = batch["neighbor_inputs"] 
         neighbor_indices = batch["neighbor_ind"]
-        neighbor_labels = batch["neighbor_labels"]
+        neighbor_labels  = batch["neighbor_labels"]
 
         # cat
         inputs = torch.cat((anchor_inputs, neighbor_inputs), dim=0)
