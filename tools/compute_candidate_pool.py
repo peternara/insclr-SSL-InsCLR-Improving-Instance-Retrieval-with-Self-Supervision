@@ -59,12 +59,14 @@ def run(task, dataset, name):
         neighbors    = []
         similarities = []
 
+        # 모두가 대상이 아니라 이렇게 분리된 상태(ranges)안에서 계산을 하지?
         for i in tqdm(range(num_chunks)):
             mined_features = features[ranges[i]:ranges[i + 1]]
             _neighbors     = memory_bank.mine_nearest_neighbors(topk=500, features=mined_features)
             neighbors.append(_neighbors)
 
-            for j in range(len(mined_features)):
+            # smiliarity score는 직접계산
+            for j in range(len(mined_features)): 
                 single_feature = mined_features[j]
                 its_neighbors  = features[_neighbors[j]]
                 similarities.append(np.dot(single_feature, its_neighbors.T))
