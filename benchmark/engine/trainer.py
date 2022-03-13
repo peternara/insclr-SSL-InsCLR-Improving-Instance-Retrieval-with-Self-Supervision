@@ -56,21 +56,21 @@ def do_train(cfg, dataloader, model, criterion, optimizer, scheduler,
         log = {}
         data_time = time.time() - end
 
-        # see : ./benchmark/data/datasets/gldv2.py#L55 
+        # 여기서 두개(gldv2+dataset_with_neighbors)가 결합한다. 
+        # /benchmark/data/__init__.py#L35
+        # /benchmark/data/__init__.py#L44 
         anchor_inputs    = batch["input"]
         anchor_indices   = batch["idx"]
-        anchor_labels    = batch["label"]
-
-        # gldv2.py 에 이게 없다 ?
-        # /benchmark/data/datasets/dataset_with_neighbors.py 여기서야하는데.. 이상하다.
+        anchor_labels    = batch["label"]      
+        
         neighbor_inputs  = batch["neighbor_inputs"] 
         neighbor_indices = batch["neighbor_ind"]
         neighbor_labels  = batch["neighbor_labels"]
 
         # cat
-        inputs = torch.cat((anchor_inputs, neighbor_inputs), dim=0)
+        inputs  = torch.cat((anchor_inputs, neighbor_inputs), dim=0)
         indices = torch.cat((anchor_indices, neighbor_indices), dim=0)
-        labels = torch.cat((anchor_labels, neighbor_labels), dim=0).long()
+        labels  = torch.cat((anchor_labels, neighbor_labels), dim=0).long()
 
         if cfg.NOAUG.ENABLE:
             noaug_anchor_inputs = batch["noaug_input"].to(device)
