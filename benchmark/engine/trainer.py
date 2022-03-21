@@ -68,6 +68,13 @@ def do_train(cfg, dataloader, model, criterion, optimizer, scheduler,
         neighbor_indices = batch["neighbor_ind"]
         neighbor_labels  = batch["neighbor_labels"]  # fake label > benchmark/data/datasets/dataset_with_neighbors.py#L42
         # anchor_labels == neighbor_labels 은 같아야한다. 실제 소스에서도 그렇고.
+        
+        # anchors :  torch.Size([64, 3, 224, 224]) torch.Size([64]) torch.Size([64])
+        # NN      :  torch.Size([192, 3, 224, 224]) torch.Size([192]) torch.Size([192])
+        # print('anchors : ', anchor_inputs.size(), anchor_indices.size(), anchor_labels.size())
+        # print('NN      : ', neighbor_inputs.size(), neighbor_indices.size(), neighbor_labels.size())
+        # print(anchor_labels) # tensor([ 962226, 1189102,,,
+        # print(neighbor_labels) # tensor([ 962226,  962226,  962226, 1189102, 1189102, 1189102, > Nb = 3
 
         # cat
         inputs  = torch.cat((anchor_inputs, neighbor_inputs), dim=0)
